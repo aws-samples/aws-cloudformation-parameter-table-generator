@@ -1,0 +1,14 @@
+[
+    {
+        "ParameterKey": "AllowedCIDRBlocks",
+        "ParameterValue": "10.10.0.0/28,10.20.0.0/28"
+    },
+    {
+        "ParameterKey": "TemplatesBucket",
+        "ParameterValue": ""
+    },
+    {
+        "ParameterKey":"QSS3BucketName",
+        "ParameterValue":"$[taskcat_autobucket]"
+    }
+]

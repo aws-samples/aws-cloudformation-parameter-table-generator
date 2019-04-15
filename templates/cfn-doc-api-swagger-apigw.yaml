@@ -1,0 +1,102 @@
+---
+swagger: "2.0"
+info:
+  version: "2019-02-01T21:47:08Z"
+  title: "CFNDocApi"
+basePath: "/prod"
+schemes:
+- "https"
+paths:
+  /generate-table:
+    get:
+      consumes:
+      - "application/json"
+      produces:
+      - "text/html"
+      parameters:
+      - name: "url"
+        in: "query"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Content-Type:
+              type: "string"
+      x-amazon-apigateway-integration:
+        uri:
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${CFDocGenerator.Arn}/invocations
+        responses:
+          default:
+            statusCode: '200'
+            responseParameters:
+              method.response.header.Content-Type: "'text/html'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              text/html: "$input.path('$')"
+        requestTemplates:
+          application/json: |
+            ##  See http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-mapping-template-reference.html
+            ##  This template will pass through all parameters including path, querystring, header, stage variables, and context through to the integration endpoint via the body/payload
+            #set($allParams = $input.params())
+            {
+            "body-json" : $input.json('$'),
+            "params" : {
+            #foreach($type in $allParams.keySet())
+                #set($params = $allParams.get($type))
+            "$type" : {
+                #foreach($paramName in $params.keySet())
+                "$paramName" : "$util.escapeJavaScript($params.get($paramName))"
+                    #if($foreach.hasNext),#end
+                #end
+            }
+                #if($foreach.hasNext),#end
+            #end
+            },
+            "stage-variables" : {
+            #foreach($key in $stageVariables.keySet())
+            "$key" : "$util.escapeJavaScript($stageVariables.get($key))"
+                #if($foreach.hasNext),#end
+            #end
+            },
+            "context" : {
+                "account-id" : "$context.identity.accountId",
+                "api-id" : "$context.apiId",
+                "api-key" : "$context.identity.apiKey",
+                "authorizer-principal-id" : "$context.authorizer.principalId",
+                "caller" : "$context.identity.caller",
+                "cognito-authentication-provider" : "$context.identity.cognitoAuthenticationProvider",
+                "cognito-authentication-type" : "$context.identity.cognitoAuthenticationType",
+                "cognito-identity-id" : "$context.identity.cognitoIdentityId",
+                "cognito-identity-pool-id" : "$context.identity.cognitoIdentityPoolId",
+                "http-method" : "$context.httpMethod",
+                "stage" : "$context.stage",
+                "source-ip" : "$context.identity.sourceIp",
+                "user" : "$context.identity.user",
+                "user-agent" : "$context.identity.userAgent",
+                "user-arn" : "$context.identity.userArn",
+                "request-id" : "$context.requestId",
+                "resource-id" : "$context.resourceId",
+                "resource-path" : "$context.resourcePath"
+                }
+            }
+        passthroughBehavior: when_no_templates
+        httpMethod: POST
+        contentHandling: CONVERT_TO_TEXT
+        type: aws
+x-amazon-apigateway-policy:
+  "Version": "2012-10-17"
+  "Statement":
+  -
+     "Effect": "Allow"
+     "Principal": "*"
+     "Action": "execute-api:Invoke"
+     "Resource":
+       "Fn::Sub": "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:*/prod/*/*"
+     "Condition":
+       "IpAddress":
+         "aws:SourceIp":
+           "Fn::Split" : [ "," , {"Ref": AllowedCIDRBlocks} ]

@@ -1,0 +1,57 @@
+body {
+    font-family: "Georgia", serif;
+}
+
+h1 {
+    font-family: sans-serif !important;
+}
+
+table {
+    border-collapse: collapse;
+    width: auto;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+thead {
+    width: 100%;
+}
+
+tbody {
+    width: 100%;
+}
+
+th {
+    font-size: 0.75em;
+    font-weight: bold;
+    text-align: left;
+    border-top: 1px solid #146eb4;
+    border-bottom: 1px solid #146eb4;
+    background-color: #cbd5e9;
+}
+
+td {
+    font-size: 0.75em;
+    text-align: left;
+    border-bottom: 1px solid #146eb4;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    padding-top: 0.1em;
+    padding-bottom: 0.1em;
+}
+
+.group-name {
+    font-style: italic;
+    font-size: 1em;
+}
+
+.red {
+    font-style: italic;
+    color: red;
+}
+
+.label-name {
+    font-weight: bold;
+}
