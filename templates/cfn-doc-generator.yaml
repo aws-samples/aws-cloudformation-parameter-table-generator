@@ -16,9 +16,9 @@ Metadata:
           - QSS3KeyPrefix
     ParameterLabels:
       AllowedCIDRBlocks:
-        default: Allowed CIDR Blocks
+        default: Allowed CIDR blocks
       TemplatesBucket:
-        default: Templates Bucket
+        default: Templates bucket
       QSS3BucketName:
         default: Quick Start S3 bucket name
       QSS3KeyPrefix:
