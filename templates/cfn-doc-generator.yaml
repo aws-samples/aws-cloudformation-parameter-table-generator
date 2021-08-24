@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: 'AWS::Serverless-2016-10-31'
-Description: Generate HTML Documentation from CloudFormation template
+Description: Generate HTML Documentation from CloudFormation template. (qs-1s7dari0n)
 Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
